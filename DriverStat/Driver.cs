@@ -48,5 +48,14 @@
 
             return statistisc;
         }
+
+        public void PrintStatistics()
+        {
+            var driverStats = GetStatistisc();
+            Console.WriteLine("Min - ", driverStats.Min);
+            Console.WriteLine("Max - ", driverStats.Max);
+            Console.WriteLine("Avg - ", driverStats.Avg);
+
+        }
     }
 }

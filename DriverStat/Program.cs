@@ -2,7 +2,7 @@
 {
     class Program
     {
-        private static Driver Driver;
+        //private static Driver Driver;
         
         static void Main(string[] args)
         {
@@ -21,41 +21,70 @@
 
             #region ShowStatistics
 
-            Driver.AddGrade(3);
-            Driver.AddGrade(4);
-            Driver.AddGrade(5);
-            var statistics = Driver.GetStatistisc();
-            Console.WriteLine($"{statistics.Min}");
-            Console.WriteLine();
-            Console.WriteLine($"{statistics.Max}");
-            Console.WriteLine();
-            Console.WriteLine($"{statistics.Avg}");
+            //Driver.AddGrade(3);
+            //Driver.AddGrade(4);
+            //Driver.AddGrade(5);
+            //var statistics = Driver.GetStatistisc();
+            //Console.WriteLine($"{statistics.Min}");
+            //Console.WriteLine();
+            //Console.WriteLine($"{statistics.Max}");
+            //Console.WriteLine();
+            //Console.WriteLine($"{statistics.Avg}");
             #endregion
 
         }
 
+
+
         static void ShowMenu()
         {
-            PrintMenu();
+            var driver = new Driver();
+            var exitProgram = true;
 
-            string optionMenu = Console.ReadLine();
+            while(exitProgram)
+            {
+                PrintMenu();
+                string optionMenu = Console.ReadLine();
 
-            if (optionMenu == "1")
-            {
-                CreateDriver();
-            }
-            else if (optionMenu == "2")
-            {
-                ReadFromFile();
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("Thanks for using the program");
-                return;
+                switch (optionMenu)
+                {
+                    case "1":
+                        driver = CreateDriver();
+                        break;
+                    case "2":
+                        ReadFromFile();
+                        break;
+                    case "3":
+                        DriverGrade(driver);
+                        break;
+                    case "4":
+                        driver.PrintStatistics();
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Thanks for using the program");
+                        break;
+                        exitProgram = false;
+                }
+
             }
 
-            DriverGrade();
+            //if (optionMenu == "1")
+            //{
+            //    driver = CreateDriver();
+            //}
+            //else if (optionMenu == "2")
+            //{
+            //    ReadFromFile();
+            //}
+            //else
+            //{
+            //    Console.Clear();
+            //    Console.WriteLine("Thanks for using the program");
+            //    return;
+            //}
+
+            //DriverGrade(driver);
         }
         static void PrintMenu()
         {
@@ -63,23 +92,26 @@
             Console.WriteLine();
             Console.WriteLine("1. Driver rating");
             Console.WriteLine("2. Show statistics");
-            Console.WriteLine("3. Exit program");
+            Console.WriteLine("3. Add rating for driver");
+            Console.WriteLine("4. Print driver ratings");
+            Console.WriteLine("5. Exit program");
         }
-        static void CreateDriver()
+        static Driver CreateDriver()
         {
             Console.Clear();
             Console.WriteLine("Enter driver details.");
             Console.Write("name: ");
-            Driver = new Driver();
 
-
-            Driver.Name = Console.ReadLine();
+            var driver = new Driver();
+            driver.Name = Console.ReadLine();
             Console.Write("surname: ");
-            Driver.Surname = Console.ReadLine();
+            driver.Surname = Console.ReadLine();
             Console.Write("ID driver: ");
-            Driver.IdDriver = int.Parse(Console.ReadLine());
+            driver.IdDriver = int.Parse(Console.ReadLine());
+
+            return driver;
         }
-        static void DriverGrade()
+        static void DriverGrade(Driver driver)
         {
             Console.Clear();
             Console.WriteLine("1. Calculate statistics");
@@ -94,7 +126,7 @@
             {
                 while (true)
                 {
-                    Console.Write("Podaj ocenę pracownika: ");
+                    Console.Write("Give the driver a rating: ");
                     var inEmp = Console.ReadLine();
 
                     if (inEmp == "q" || inEmp == "Q")
@@ -103,13 +135,13 @@
                     }
                     else if (inEmp == "")
                     {
-                        Console.WriteLine("Nie podano oceny");
+                        Console.WriteLine("No rating provided");
                         continue;
 
                     }
                     try
                     {
-                        Driver.AddGrade(inEmp);
+                        driver.AddGrade(inEmp);
                         //employee.AddGrade(inEmp);
                         //supervisor.AddGrade(inEmp);
                     }
@@ -130,14 +162,15 @@
             }
         }
 
-        public static void AddGradeToMemory()
+        public static void AddGradeToMemory(Driver driver)
         {
-            Driver.AddGrade(5);
+            driver.AddGrade(5);
         }
         static void AddGradeToFile()
         {
 
         }
+
         static void ReadFromFile()
         {
 
