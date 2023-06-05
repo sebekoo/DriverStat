@@ -3,15 +3,16 @@
     public class Driver
     {
         private List<int> listStat = new();
-        public Driver(string name, string surname, int idDriver)
-        {
-            Name = name;
-            Surname = surname;
-            IdDriver = idDriver;
-        }
-        public string Name { get; private set; }
-        public string Surname { get; private set; }
-        public int IdDriver { get; private set; }
+        //public Driver(string name, string surname, int idDriver)
+        //{
+        //    Name = name;
+        //    Surname = surname;
+        //    IdDriver = idDriver;
+        //}
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public int IdDriver { get; set; }
+        public int PunktyKarne { get; set; }
 
         public int Result
         {
@@ -21,6 +22,10 @@
             }
         }
 
+        public void AddGrade(string grade)
+        {
+
+        }
         public void AddGrade(int grade)
         {
             listStat.Add(grade);
@@ -28,7 +33,7 @@
         public Statistisc GetStatistisc()
         {
             var statistisc = new Statistisc();
-            statistisc.Avg = 0; 
+            statistisc.Avg = 0;
             statistisc.Max = int.MinValue;
             statistisc.Min = int.MaxValue;
 

@@ -2,9 +2,7 @@
 {
     class Program
     {
-        private static string name;
-        private static string surname;
-        private static int idDriver;
+        private static Driver Driver;
         
         static void Main(string[] args)
         {
@@ -22,11 +20,11 @@
             #endregion
 
             #region ShowStatistics
-            var driver = new Driver(name, surname, idDriver);
-            driver.AddGrade(3);
-            driver.AddGrade(4);
-            driver.AddGrade(5);
-            var statistics = driver.GetStatistisc();
+
+            Driver.AddGrade(3);
+            Driver.AddGrade(4);
+            Driver.AddGrade(5);
+            var statistics = Driver.GetStatistisc();
             Console.WriteLine($"{statistics.Min}");
             Console.WriteLine();
             Console.WriteLine($"{statistics.Max}");
@@ -59,7 +57,7 @@
 
             DriverGrade();
         }
-        private static void PrintMenu()
+        static void PrintMenu()
         {
             Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.");
             Console.WriteLine();
@@ -67,18 +65,21 @@
             Console.WriteLine("2. Show statistics");
             Console.WriteLine("3. Exit program");
         }
-        private static void CreateDriver()
+        static void CreateDriver()
         {
             Console.Clear();
             Console.WriteLine("Enter driver details.");
             Console.Write("name: ");
-            name = Console.ReadLine();
+            Driver = new Driver();
+
+
+            Driver.Name = Console.ReadLine();
             Console.Write("surname: ");
-            surname = Console.ReadLine();
+            Driver.Surname = Console.ReadLine();
             Console.Write("ID driver: ");
-            idDriver = int.Parse(Console.ReadLine());
+            Driver.IdDriver = int.Parse(Console.ReadLine());
         }
-        private static void DriverGrade()
+        static void DriverGrade()
         {
             Console.Clear();
             Console.WriteLine("1. Calculate statistics");
@@ -87,9 +88,36 @@
 
             string optionGrade = Console.ReadLine();
 
+            
+
             if (optionGrade == "1")
             {
-                AddGradeToMemory();
+                while (true)
+                {
+                    Console.Write("Podaj ocenę pracownika: ");
+                    var inEmp = Console.ReadLine();
+
+                    if (inEmp == "q" || inEmp == "Q")
+                    {
+                        break;
+                    }
+                    else if (inEmp == "")
+                    {
+                        Console.WriteLine("Nie podano oceny");
+                        continue;
+
+                    }
+                    try
+                    {
+                        Driver.AddGrade(inEmp);
+                        //employee.AddGrade(inEmp);
+                        //supervisor.AddGrade(inEmp);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Exception Catched: {e.Message}");
+                    }
+                }
             }
             else if (optionGrade == "2")
             {
@@ -101,15 +129,16 @@
                 ShowMenu();
             }
         }
-        private static void AddGradeToMemory()
+
+        public static void AddGradeToMemory()
         {
-            driver.AddGrade(optionGrade);
+            Driver.AddGrade(5);
         }
-        private static void AddGradeToFile()
+        static void AddGradeToFile()
         {
 
         }
-        private static void ReadFromFile()
+        static void ReadFromFile()
         {
 
         }
