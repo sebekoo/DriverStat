@@ -2,8 +2,6 @@
 {
     class Program
     {
-        //private static Driver Driver;
-        
         static void Main(string[] args)
         {
             ShowMenu();
@@ -18,30 +16,14 @@
             //    int fuel = int.Parse(Console.ReadLine());
             //}
             #endregion
-
-            #region ShowStatistics
-
-            //Driver.AddGrade(3);
-            //Driver.AddGrade(4);
-            //Driver.AddGrade(5);
-            //var statistics = Driver.GetStatistisc();
-            //Console.WriteLine($"{statistics.Min}");
-            //Console.WriteLine();
-            //Console.WriteLine($"{statistics.Max}");
-            //Console.WriteLine();
-            //Console.WriteLine($"{statistics.Avg}");
-            #endregion
-
         }
-
-
 
         static void ShowMenu()
         {
             var driver = new Driver();
             var exitProgram = true;
 
-            while(exitProgram)
+            while (exitProgram)
             {
                 PrintMenu();
                 string optionMenu = Console.ReadLine();
@@ -63,34 +45,17 @@
                     default:
                         Console.Clear();
                         Console.WriteLine("Thanks for using the program");
-                        break;
                         exitProgram = false;
+                        break;
                 }
-
             }
-
-            //if (optionMenu == "1")
-            //{
-            //    driver = CreateDriver();
-            //}
-            //else if (optionMenu == "2")
-            //{
-            //    ReadFromFile();
-            //}
-            //else
-            //{
-            //    Console.Clear();
-            //    Console.WriteLine("Thanks for using the program");
-            //    return;
-            //}
-
-            //DriverGrade(driver);
         }
-        static void PrintMenu()
+        public static void PrintMenu()
         {
+            Console.Clear();
             Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.");
             Console.WriteLine();
-            Console.WriteLine("1. Driver rating");
+            Console.WriteLine("1. Create Driver");
             Console.WriteLine("2. Show statistics");
             Console.WriteLine("3. Add rating for driver");
             Console.WriteLine("4. Print driver ratings");
@@ -98,11 +63,10 @@
         }
         static Driver CreateDriver()
         {
+            var driver = new Driver();
             Console.Clear();
             Console.WriteLine("Enter driver details.");
             Console.Write("name: ");
-
-            var driver = new Driver();
             driver.Name = Console.ReadLine();
             Console.Write("surname: ");
             driver.Surname = Console.ReadLine();
@@ -111,7 +75,7 @@
 
             return driver;
         }
-        static void DriverGrade(Driver driver)
+        public static void DriverGrade(Driver driver)
         {
             Console.Clear();
             Console.WriteLine("1. Calculate statistics");
@@ -120,30 +84,25 @@
 
             string optionGrade = Console.ReadLine();
 
-            
-
             if (optionGrade == "1")
             {
                 while (true)
                 {
                     Console.Write("Give the driver a rating: ");
-                    var inEmp = Console.ReadLine();
+                    var inDrv = Console.ReadLine();
 
-                    if (inEmp == "q" || inEmp == "Q")
+                    if (inDrv == "q" || inDrv == "Q")
                     {
                         break;
                     }
-                    else if (inEmp == "")
+                    else if (inDrv == "")
                     {
                         Console.WriteLine("No rating provided");
                         continue;
-
                     }
                     try
                     {
-                        driver.AddGrade(inEmp);
-                        //employee.AddGrade(inEmp);
-                        //supervisor.AddGrade(inEmp);
+                        driver.AddGrade(inDrv);
                     }
                     catch (Exception e)
                     {
@@ -166,12 +125,12 @@
         {
             driver.AddGrade(5);
         }
-        static void AddGradeToFile()
+        public static void AddGradeToFile()
         {
 
         }
 
-        static void ReadFromFile()
+        public static void ReadFromFile()
         {
 
         }

@@ -24,8 +24,16 @@
 
         public void AddGrade(string grade)
         {
-
+            if(int.TryParse(grade, out int result))
+            {
+                AddGrade(result);
+            }
+            else
+            {
+                Console.WriteLine("You must enter the rating in numerical form");
+            }
         }
+
         public void AddGrade(int grade)
         {
             listStat.Add(grade);
