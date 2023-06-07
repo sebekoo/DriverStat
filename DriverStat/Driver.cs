@@ -1,14 +1,14 @@
 ﻿namespace DriverStat
 {
-    public class Driver
+    public class Driver : IDriver
     {
         private List<int> listStat = new();
-        //public Driver(string name, string surname, int idDriver)
-        //{
-        //    Name = name;
-        //    Surname = surname;
-        //    IdDriver = idDriver;
-        //}
+        public Driver(string name, string surname, int idDriver)
+        {
+            Name = name;
+            Surname = surname;
+            IdDriver = idDriver;
+        }
         public string Name { get; set; }
         public string Surname { get; set; }
         public int IdDriver { get; set; }
@@ -24,7 +24,7 @@
 
         public void AddGrade(string grade)
         {
-            if(int.TryParse(grade, out int result))
+            if (int.TryParse(grade, out int result))
             {
                 AddGrade(result);
             }

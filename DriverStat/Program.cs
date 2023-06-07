@@ -20,7 +20,9 @@
 
         static void ShowMenu()
         {
-            var driver = new Driver();
+            //var name = Console.ReadLine();
+            Driver driver = new Driver("aaa", "Nowak", 12);
+            
             var exitProgram = true;
 
             while (exitProgram)
@@ -32,38 +34,43 @@
                 {
                     case "1":
                         driver = CreateDriver();
+                        DriverGrade(driver);
                         break;
                     case "2":
                         ReadFromFile();
                         break;
                     case "3":
-                        DriverGrade(driver);
-                        break;
-                    case "4":
                         driver.PrintStatistics();
                         break;
                     default:
                         Console.Clear();
-                        Console.WriteLine("Thanks for using the program");
-                        exitProgram = false;
+                        Console.WriteLine("are you sure want to close progream y/n?");
+                        var confirmExit = Console.ReadLine();
+                        if (confirmExit.Equals("y"))
+                        {
+                            Console.WriteLine("Thanks for using the program");
+                            exitProgram = false;
+                        }
                         break;
                 }
             }
         }
         public static void PrintMenu()
         {
+            var index = 1;
             Console.Clear();
             Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.");
             Console.WriteLine();
-            Console.WriteLine("1. Create Driver");
-            Console.WriteLine("2. Show statistics");
-            Console.WriteLine("3. Add rating for driver");
-            Console.WriteLine("4. Print driver ratings");
-            Console.WriteLine("5. Exit program");
+            Console.WriteLine("{0}. Create Driver and add grade", index++);
+            Console.WriteLine("{0}. Read stat from file", index++);
+            Console.WriteLine("{0}. Print driver ratings", index++);
+            Console.WriteLine("{0}. Exit program", index++);
+
         }
         static Driver CreateDriver()
         {
-            var driver = new Driver();
+            //var name = Console.ReadLine();
+            var driver = new Driver("Tomasz", "Nowak", 12);
             Console.Clear();
             Console.WriteLine("Enter driver details.");
             Console.Write("name: ");
