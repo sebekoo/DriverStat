@@ -1,13 +1,21 @@
-﻿namespace DriverStat
+﻿using System.Data;
+
+namespace DriverStat
 {
     public class Driver : IDriver
     {
-        private List<int> listStat = new();
+        public List<int> listStat = new();
+        
         public Driver(string name, string surname, int idDriver)
         {
             Name = name;
             Surname = surname;
             IdDriver = idDriver;
+        }
+
+        public Driver()
+        {
+
         }
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -22,9 +30,18 @@
             }
         }
 
+        public int DlListy()
+        {
+            var a = listStat.Count;
+            return a;
+        }
         public void AddGrade(string grade)
         {
-            if (int.TryParse(grade, out int result))
+            if(grade.Length > 2)
+            {
+                Console.WriteLine("Max rating is 99");
+            }
+            else if (int.TryParse(grade, out int result))
             {
                 AddGrade(result);
             }
@@ -59,6 +76,19 @@
 
         public void PrintStatistics()
         {
+            if (Name == null)
+            {
+                Console.WriteLine("Please first create driver and grade ");
+                Console.WriteLine();
+                return;
+            }
+
+            if (listStat.Count == 0)
+            {
+                Console.WriteLine("Driver is not grade. Please grade Driver");
+                Console.WriteLine();
+                return;
+            }
             var driverStats = GetStatistisc();
             Console.WriteLine("Min - ", driverStats.Min);
             Console.WriteLine("Max - ", driverStats.Max);
