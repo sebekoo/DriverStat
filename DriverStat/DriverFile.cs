@@ -1,36 +1,22 @@
 ﻿namespace DriverStat
 {
-    public class Driver : DriverBase
+    public class DriverFile : DriverBase
     {
         private const string fileName = "driver.txt";
-
-        public List<int> listStat = new();
-
-        public Driver()
+        public DriverFile()
             : base()
         {
         }
-
-        public Driver(string name, string surname, int idDriver)
-            : base()
+        public DriverFile(string name, string surname, int idDriver)
+           : base()
         {
             Name = name;
             Surname = surname;
             IdDriver = idDriver;
         }
-
         public string Name { get; set; }
         public string Surname { get; set; }
         public int IdDriver { get; set; }
-        public int PunktyKarne { get; set; }
-
-        public int Result
-        {
-            get
-            {
-                return listStat.Sum();
-            }
-        }
 
         public override void AddGrade(string grade)
         {
@@ -50,15 +36,19 @@
 
         public override void AddGrade(int grade)
         {
-            listStat.Add(grade);
+            using var writer = File.AppendText(fileName);
+            writer.WriteLine(grade);
         }
 
-        public void ReadGradesFromFile()
+        public override Statistics GetStatistics()
         {
-            Name = "Adam";
-            Surname = "Kowalski";
-            IdDriver = 2;
+            var gradesFromFile = ReadGradesFromFile();
+            var result = CountStatistics(gradesFromFile);
+            return result;
+        }
 
+        public List<int> ReadGradesFromFile()
+        {
             var grades = new List<int>();
             if (File.Exists($"{fileName}"))
             {
@@ -71,13 +61,12 @@
                     line = reader.ReadLine();
                 }
             }
-            listStat = grades;
+            return grades;
         }
-
-        public override Statistics GetStatistics()
+        private Statistics CountStatistics(List<int> grades)
         {
             var statistics = new Statistics();
-            foreach (var grade in listStat)
+            foreach (var grade in grades)
             {
                 statistics.AddGrade(grade);
             }
@@ -94,7 +83,7 @@
                 return;
             }
 
-            if (listStat.Count == 0)
+            if (!File.Exists(fileName))
             {
                 Console.WriteLine("Driver is not grade. Please grade Driver");
                 Console.WriteLine();
@@ -104,7 +93,6 @@
             Console.WriteLine($"Min - {driverStats.Min}");
             Console.WriteLine($"Max - {driverStats.Max}");
             Console.WriteLine($"Avg - {driverStats.Avg:N0}");
-
         }
     }
 }

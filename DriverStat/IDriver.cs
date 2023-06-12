@@ -7,8 +7,6 @@
         int IdDriver { get; }
         void AddGrade(string grade);
         void AddGrade(int grade);
-        void PrintStatistics();
-        Statistisc GetStatistisc();
-
+        Statistics GetStatistics();
     }
 }
