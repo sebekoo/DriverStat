@@ -34,33 +34,37 @@
 
         public override void AddGrade(string grade)
         {
-            if (grade.Length > 2)
-            {
-                Console.WriteLine("Max rating is 99");
-            }
-            else if (int.TryParse(grade, out int result))
+            if (int.TryParse(grade, out int result))
             {
                 AddGrade(result);
             }
             else
             {
-                Console.WriteLine("You must enter the rating in numerical form");
+                Console.WriteLine("You must enter the rating in numerical form \n");
             }
+            
         }
 
         public override void AddGrade(int grade)
         {
-            listStat.Add(grade);
+            if(grade < 0)
+            {
+                Console.WriteLine("The rating can't be negative \n");
+            }
+            else if (grade > 99)
+            {
+                Console.WriteLine("Max rating is 99 \n");
+            }
+            else
+            {
+                listStat.Add(grade);
+            }
         }
 
         public void ReadGradesFromFile()
         {
-            Name = "Adam";
-            Surname = "Kowalski";
-            IdDriver = 2;
-
             var grades = new List<int>();
-            if (File.Exists($"{fileName}"))
+            if (File.Exists(fileName))
             {
                 using var reader = File.OpenText(fileName);
                 var line = reader.ReadLine();
@@ -71,9 +75,39 @@
                     line = reader.ReadLine();
                 }
             }
-            listStat = grades;
+            else
+            {
+                Console.WriteLine("File does not exist.");
+                Console.WriteLine("First must create and grade driver");
+                Console.ReadKey();
+                listStat = grades;
+            }
         }
+        public void CalculateAndSave()
+        {
+            //string[] lines = File.ReadAllLines(fileName);
 
+            // Sprawdzamy zawartość ostatniej linii
+            //if (lines.Length > 0)
+            //{
+            //    string lastLine = lines[lines.Length - 1];
+            //    Console.WriteLine("Ostatnia linia w pliku: " + lastLine);
+            //}
+            //if (!string.IsNullOrEmpty(lines.Last()))
+            //{
+            //    var x = lines.Last();
+            //    File.AppendAllText(fileName, Environment.NewLine);
+            //}
+            using var writer = File.AppendText(fileName);
+            if (File.Exists(fileName))
+            {
+                //using var sw = new StreamWriter(fileName, true);
+                for (int i = 0; i < listStat.Count; i++)
+                {
+                    writer.WriteLine(listStat[i]);
+                }
+            }
+        }
         public override Statistics GetStatistics()
         {
             var statistics = new Statistics();
@@ -81,7 +115,6 @@
             {
                 statistics.AddGrade(grade);
             }
-
             return statistics;
         }
 
@@ -91,13 +124,14 @@
             {
                 Console.WriteLine("Please first create driver and grade ");
                 Console.WriteLine();
+                Console.ReadKey();
                 return;
             }
 
             if (listStat.Count == 0)
             {
                 Console.WriteLine("Driver is not grade. Please grade Driver");
-                Console.WriteLine();
+                Console.ReadKey();
                 return;
             }
             var driverStats = GetStatistics();

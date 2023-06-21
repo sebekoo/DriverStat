@@ -45,9 +45,9 @@ void ShowMenu()
 void MainMenu()
 {
     var index = 1;
+    Console.Clear();
     Console.WriteLine();
-    Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.");
-    Console.WriteLine();
+    Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.\n");
     Console.WriteLine("{0}. Create Driver and add grade", index++);
     //Console.WriteLine("{0}. Save stat to file", index++);
     Console.WriteLine("{0}. Read stat from file", index++);
@@ -59,13 +59,13 @@ Driver CreateDriver()
 {
     Console.Clear();
     Console.WriteLine("Enter driver details.");
-    Console.Write("name: ");
+    Console.Write("     name: ");
     var name = Console.ReadLine();
     if (CheckStringIsEmpty("Driver Name", name))
     {
         return null;
     }
-    Console.Write("surname: ");
+    Console.Write("  surname: ");
     var surname = Console.ReadLine();
     if (CheckStringIsEmpty("Driver Surname", surname))
     {
@@ -74,13 +74,26 @@ Driver CreateDriver()
 
     Console.Write("ID driver: ");
     var lenght = Console.ReadLine();
-    if (lenght.Length > 1 || lenght == "")
+    bool isNumber = int.TryParse(lenght, out var number);
+    bool isLongerThanOne = lenght.Length > 1; 
+
+    if(!isNumber)
     {
-        Console.WriteLine();
-        Console.WriteLine("ID driver is not be empty or is too long");
-        Console.Clear();
+        Console.WriteLine("ID driver must be number \n  Press any key to continue");
+        Console.ReadKey();
         return null;
     }
+    else if (isLongerThanOne)
+    {
+        Console.WriteLine("ID driver is too long \n  Press any key to continue");
+        Console.ReadKey();
+        return null;
+    }
+    else
+    {
+        CheckStringIsEmpty("ID driver ", name);
+    }
+
     var idDriver = int.Parse(lenght);
     var driver = new Driver(name, surname, idDriver);
 
@@ -90,11 +103,13 @@ bool CheckStringIsEmpty(string msg, string value)
 {
     if (string.IsNullOrEmpty(value))
     {
-        Console.WriteLine("{0} Cannot be empty or null", msg);
+        Console.WriteLine("{0} cannot be empty or blank", msg);
+        Console.ReadKey();
         return true;
     }
     return false;
 }
+
 void MenuGrade(Driver grade)
 {
     Console.WriteLine();
@@ -104,67 +119,38 @@ void MenuGrade(Driver grade)
 
     string optionGrade = Console.ReadLine();
     string inDrv;
-    if (optionGrade == "1")
-    {
-        while (grade.listStat.Count < 7)
-        {
-            Console.Write("Give the driver a rating: ");
-            inDrv = Console.ReadLine();
+    //var file = new DriverFile();
 
-            if (inDrv == "q" || inDrv == "Q")
-            {
-                break;
-            }
-            else if (inDrv == "")
-            {
-                Console.WriteLine("No rating provided");
-                continue;
-            }
-            try
-            {
-                grade.AddGrade(inDrv);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Exception Catched: {e.Message}");
-            }
-        }
-    }
-    else if (optionGrade == "2")
-    {
-        var file = new DriverFile();
-        while (grade.listStat.Count < 7)
-        {
-            Console.Write("Give the driver a rating: ");
-            inDrv = Console.ReadLine();
-
-            if (inDrv == "q" || inDrv == "Q")
-            {
-                break;
-            }
-            else if (inDrv == "")
-            {
-                Console.WriteLine("No rating provided");
-                continue;
-            }
-            try
-            {
-                file.AddGrade(inDrv);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Exception Catched: {e.Message}");
-            }
-        }
-    }
-    else
+    if (optionGrade == "3")
     {
         Console.Clear();
+        return;
     }
-}
+    while (grade.listStat.Count < 6)
+    {
+        Console.Write("For exit press \"q\". Give the driver a rating: ");
+        inDrv = Console.ReadLine();
 
-void ReadFromFile()
-{
-    DriverFile driverFile = new DriverFile();
-    driverFile.GetStatistics();
+        if (inDrv == "q" || inDrv == "Q")
+        {
+            break;
+        }
+        else if (inDrv == "")
+        {
+            Console.WriteLine("No rating provided");
+            continue;
+        }
+        try
+        {
+            grade.AddGrade(inDrv);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Exception Catched: {e.Message}");
+        }
+    }
+    if (optionGrade == "2")
+    {
+        grade.CalculateAndSave();
+    }
 }
