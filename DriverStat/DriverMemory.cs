@@ -1,14 +1,14 @@
 ﻿namespace DriverStat
 {
-    public class Driver : DriverBase
+    public class DriverMemory : DriverBase
     {
         public List<int> grades = new();
 
-        public Driver()
+        public DriverMemory()
             : base()
         {
         }
-        public Driver(string name, string surname, int idDriver)
+        public DriverMemory(string name, string surname, int idDriver)
             : base()
         {
             Name = name;

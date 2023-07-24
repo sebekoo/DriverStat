@@ -5,7 +5,7 @@ namespace Driver.Tests
         [Test]
         public void Test()
         {
-            var driver = new DriverStat.Driver();
+            var driver = new DriverStat.DriverMemory();
             driver.AddGrade(5);
             driver.AddGrade(6);
 
