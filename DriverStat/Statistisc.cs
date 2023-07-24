@@ -7,6 +7,7 @@
         public int Sum { get; private set; }
         public int Count { get; private set; }
         public float Avg { get { return Sum / Count; } }
+
         public Statistics()
         {
             Count = 0;
@@ -23,5 +24,4 @@
             Max = Math.Max(grade, Max);
         }
     }
-    
 }
