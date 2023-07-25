@@ -68,7 +68,7 @@
 
         public void PrintStatistics()
         {
-            if (Name == null)
+            if (grades.Count == 0)
             {
                 Console.WriteLine("Driver is not grade. Please grade Driver");
                 Console.ReadKey();
@@ -79,6 +79,10 @@
             Console.WriteLine($"Min - {driverStats.Min}");
             Console.WriteLine($"Max - {driverStats.Max}");
             Console.WriteLine($"Avg - {driverStats.Avg:N0}");
+        }
+        public void PrintDriver()
+        {
+            Console.WriteLine($"Actual Driver is : {Name}, {Surname}, {IdDriver}");
         }
     }
 }

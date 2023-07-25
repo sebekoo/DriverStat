@@ -1,33 +1,78 @@
 ﻿using DriverStat;
 
-ShowMenu();
+Menu();
 
-void ShowMenu()
+void Menu()
 {
     DriverMemory driver = new();
     var exitProgram = true;
 
     while (exitProgram)
     {
-        MainMenu();
-
+        var index = 1;
+        Console.WriteLine();
+        Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.\n");
+        Console.WriteLine("{0}. Create Driver", index++);
+        Console.WriteLine("{0}. Add grade", index++);
+        Console.WriteLine("{0}. Save grade from file", index++);
+        Console.WriteLine("{0}. Read grade from file", index++);
+        Console.WriteLine("{0}. Show statistics", index++);
+        Console.WriteLine("{0}. Exit program", index++);
+        
         string optionMenu = Console.ReadLine();
         Console.Clear();
         
         switch (optionMenu)
         {
             case "1":
-                if (driver.Name != null)
+                if (!string.IsNullOrEmpty(driver.Name))
                 {
-                    MenuGrade(driver);
+                    driver.PrintDriver();
+                    Console.WriteLine("Do You want create new Driver ? y/n :");
+                    var yesNo = Console.ReadLine();
+
+                    if (!yesNo.Equals("y"))
+                    {
+                        break;
+                    }
                 }
-                else
-                {
-                    driver = CreateDriver();
-                    MenuGrade(driver);
-                }
+               driver = CreateDriver();
                 break;
             case "2":
+                while (driver.grades.Count < 6)
+                {
+                    Console.Write("For exit press \"q\". Give the driver a rating: ");
+                    var inDrv = Console.ReadLine();
+
+                    if (inDrv == "q" || inDrv == "Q")
+                    {
+                        break;
+                    }
+                    else if (inDrv == "")
+                    {
+                        Console.WriteLine("No rating provided");
+                        continue;
+                    }
+                    driver.AddGrade(inDrv);
+                }
+                break;
+            case "3":
+                if (driver.grades.Count == 0)
+                {
+                    Console.WriteLine("Brak ocen do zapisania");
+                    break;
+                }
+                DriverFile.SaveToFile(driver.grades);
+                break;
+            case "4":
+                driver.grades = DriverFile.ReadGradesFromFile();
+                if (driver.grades.Count == 0)
+                {
+                    Console.WriteLine("No yet ratings");
+                    Console.ReadKey();
+                }
+                break;
+            case "5":
                 driver.PrintStatistics();
                 break;
             default:
@@ -42,16 +87,6 @@ void ShowMenu()
                 break;
         }
     }
-}
-
-void MainMenu()
-{
-    var index = 1;
-    Console.WriteLine();
-    Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.\n");
-    Console.WriteLine("{0}. Create Driver and add grade", index++);
-    Console.WriteLine("{0}. Show statistics", index++);
-    Console.WriteLine("{0}. Exit program", index++);
 }
 
 DriverMemory CreateDriver()
@@ -107,90 +142,4 @@ bool CheckStringIsEmpty(string msg, string value)
         return true;
     }
     return false;
-}
-
-void MenuGrade(DriverMemory driver)
-{
-    Console.WriteLine();
-    Console.WriteLine("1. Calculate statistics");
-    Console.WriteLine("2. Read grade from file");
-    Console.WriteLine("3. Save grade from file");
-    Console.WriteLine("4. Back to previous menu");
-
-    string optionGrade = Console.ReadLine();
-    string inDrv;
-
-    switch (optionGrade)
-    {
-        case "1":
-            while (driver.grades.Count < 6)
-            {
-                Console.Write("For exit press \"q\". Give the driver a rating: ");
-                inDrv = Console.ReadLine();
-
-                if (inDrv == "q" || inDrv == "Q")
-                {
-                    break;
-                }
-                else if (inDrv == "")
-                {
-                    Console.WriteLine("No rating provided");
-                    continue;
-                }
-                driver.AddGrade(inDrv);
-            }
-            break; 
-        case "2":
-            driver.grades = DriverFile.ReadGradesFromFile();
-            break; 
-        case "3":
-            if (driver.grades.Count == 0)
-            {
-                Console.WriteLine( "Brak ocen" );
-                Console.ReadKey();
-                break;
-            }
-
-            DriverFile.SaveToFile(driver.grades);
-            break;
-        default:
-            Console.Clear();
-            return;
-    }
-
-    //if (optionGrade == "1" || optionGrade == "2")
-    //{
-    //    while (grade.grades.Count < 6)
-    //    {
-    //        Console.Write("For exit press \"q\". Give the driver a rating: ");
-    //        inDrv = Console.ReadLine();
-
-    //        if (inDrv == "q" || inDrv == "Q")
-    //        {
-    //            break;
-    //        }
-    //        else if (inDrv == "")
-    //        {
-    //            Console.WriteLine("No rating provided");
-    //            continue;
-    //        }
-    //        try
-    //        {
-    //            grade.AddGrade(inDrv);
-    //            if (optionGrade == "3")
-    //            {
-    //                DriverFile.SaveToFile(inDrv);
-    //            }
-    //        }
-    //        catch (Exception e)
-    //        {
-    //            Console.WriteLine($"Exception Catched: {e.Message}");
-    //        }
-    //    }
-    //}
-    //else if (optionGrade == "4")
-    //{
-    //    Console.Clear();
-    //    return;
-    //}
 }

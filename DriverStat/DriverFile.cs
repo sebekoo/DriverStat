@@ -13,8 +13,12 @@
                 var line = reader.ReadLine();
                 while (line != null)
                 {
-                    var nember = int.Parse(line);
-                    grades.Add(nember);
+                    var number = -1;
+                    int.TryParse(line, out number);
+                    if (number > 0)
+                    {
+                        grades.Add(number);
+                    }
                     line = reader.ReadLine();
                 }
             }
@@ -26,8 +30,11 @@
             using var writer = File.AppendText(fileName);
             if (File.Exists(fileName))
             {
-                writer.WriteLine(grade);
-                Console.WriteLine("Add grade");
+                for (int i = 0; i < grade.Count; i++)
+                {
+                    writer.WriteLine(grade[i]);
+                }
+                Console.WriteLine("Grade saved");
             }
         }
     }
