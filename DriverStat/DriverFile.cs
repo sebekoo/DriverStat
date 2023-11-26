@@ -1,6 +1,6 @@
 ﻿namespace DriverStat
 {
-    public static class DriverFile
+    public class DriverFile : DriverBase
     {
         private const string fileName = "driver.txt";
 
@@ -36,6 +36,21 @@
                 }
                 Console.WriteLine("Grade saved");
             }
+        }
+
+        public override void AddGrade(string grade)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddGrade(int grade)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Statistics GetStatistics()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -18,25 +18,28 @@ void Menu()
         Console.WriteLine("{0}. Read grade from file", index++);
         Console.WriteLine("{0}. Show statistics", index++);
         Console.WriteLine("{0}. Exit program", index++);
-        
+
         string optionMenu = Console.ReadLine();
         Console.Clear();
-        
+
         switch (optionMenu)
         {
             case "1":
-                if (!string.IsNullOrEmpty(driver.Name))
+                if (string.IsNullOrEmpty(driver.Name))
                 {
-                    driver.PrintDriver();
+                    driver = CreateDriver();
+                }
+                else
+                {
                     Console.WriteLine("Do You want create new Driver ? y/n :");
                     var yesNo = Console.ReadLine();
 
-                    if (!yesNo.Equals("y"))
+                    if (yesNo.Equals("y"))
                     {
                         break;
                     }
                 }
-               driver = CreateDriver();
+                driver.PrintDriver();
                 break;
             case "2":
                 while (driver.grades.Count < 6)
@@ -53,13 +56,23 @@ void Menu()
                         Console.WriteLine("No rating provided");
                         continue;
                     }
-                    driver.AddGrade(inDrv);
+
+                    try
+                    {
+                        driver.AddGrade(inDrv);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Exception catched: {e.Message}");
+                    }
                 }
                 break;
             case "3":
                 if (driver.grades.Count == 0)
                 {
-                    Console.WriteLine("Brak ocen do zapisania");
+                    Console.WriteLine("There are no ratings to save");
+                    Console.ReadKey();
+                    Console.Clear();
                     break;
                 }
                 DriverFile.SaveToFile(driver.grades);
@@ -68,8 +81,9 @@ void Menu()
                 driver.grades = DriverFile.ReadGradesFromFile();
                 if (driver.grades.Count == 0)
                 {
-                    Console.WriteLine("No yet ratings");
+                    Console.WriteLine("File does not exists");
                     Console.ReadKey();
+                    Console.Clear();
                 }
                 break;
             case "5":
@@ -133,6 +147,7 @@ DriverMemory CreateDriver()
 
     return driver;
 }
+
 bool CheckStringIsEmpty(string msg, string value)
 {
     if (string.IsNullOrEmpty(value))
