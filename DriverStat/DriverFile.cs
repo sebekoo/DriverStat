@@ -4,27 +4,15 @@
     {
         private const string fileName = "driver.txt";
 
-        public static List<int> ReadGradesFromFile()
-        {
-            var grades = new List<int>();
-            if (File.Exists($"{fileName}"))
-            {
-                using var reader = File.OpenText(fileName);
-                var line = reader.ReadLine();
-                while (line != null)
-                {
-                    var number = -1;
-                    int.TryParse(line, out number);
-                    if (number > 0)
-                    {
-                        grades.Add(number);
-                    }
-                    line = reader.ReadLine();
-                }
-            }
-            return grades;
-        }
+        //public static void FileExist()
+        //{
+        //    if (!File.Exists(fileName))
+        //    {
+        //        Console.WriteLine("File doesn't exist");
+        //        File.Create(fileName);
+        //    }
 
+        //}
         public static void SaveToFile(List<int> grade)
         {
             using var writer = File.AppendText(fileName);
@@ -38,19 +26,25 @@
             }
         }
 
-        public override void AddGrade(string grade)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void AddGrade(int grade)
-        {
-            throw new NotImplementedException();
-        }
-
         public override Statistics GetStatistics()
         {
-            throw new NotImplementedException();
+            var statistics = new Statistics();
+            if (File.Exists(fileName))
+            {
+                using var reader = File.OpenText(fileName);
+                var line = reader.ReadLine();
+                while (line is not null)
+                {
+                    var number = -1;
+                    int.TryParse(line, out number);
+                    if (number > 0)
+                    {
+                        grades.Add(number);
+                    }
+                    line = reader.ReadLine();
+                }
+            }
+            return statistics;
         }
     }
 }

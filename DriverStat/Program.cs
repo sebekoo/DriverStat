@@ -14,8 +14,7 @@ void Menu()
         Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.\n");
         Console.WriteLine("{0}. Create Driver", index++);
         Console.WriteLine("{0}. Add grade", index++);
-        Console.WriteLine("{0}. Save grade from file", index++);
-        Console.WriteLine("{0}. Read grade from file", index++);
+        //Console.WriteLine("{0}. Save grade to file", index++);
         Console.WriteLine("{0}. Show statistics", index++);
         Console.WriteLine("{0}. Exit program", index++);
 
@@ -70,7 +69,7 @@ void Menu()
             case "3":
                 if (driver.grades.Count == 0)
                 {
-                    Console.WriteLine("There are no ratings to save");
+                    Console.WriteLine("No ratings to show");
                     Console.ReadKey();
                     Console.Clear();
                     break;
@@ -78,15 +77,6 @@ void Menu()
                 DriverFile.SaveToFile(driver.grades);
                 break;
             case "4":
-                driver.grades = DriverFile.ReadGradesFromFile();
-                if (driver.grades.Count == 0)
-                {
-                    Console.WriteLine("File does not exists");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-                break;
-            case "5":
                 driver.PrintStatistics();
                 break;
             default:
