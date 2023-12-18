@@ -12,11 +12,11 @@ void Menu()
         var index = 1;
         Console.WriteLine();
         Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.\n");
-        Console.WriteLine("{0}. Create Driver", index++);
-        Console.WriteLine("{0}. Add grade", index++);
+        Console.WriteLine("{0}. Create Driver", index++); //1
+        Console.WriteLine("{0}. Add grade", index++); //2
         //Console.WriteLine("{0}. Save grade to file", index++);
-        Console.WriteLine("{0}. Show statistics", index++);
-        Console.WriteLine("{0}. Exit program", index++);
+        Console.WriteLine("{0}. Show statistics", index++); //3
+        Console.WriteLine("{0}. Exit program", index++); //4
 
         string optionMenu = Console.ReadLine();
         Console.Clear();
@@ -41,7 +41,7 @@ void Menu()
                 driver.PrintDriver();
                 break;
             case "2":
-                while (driver.grades.Count < 6)
+                while (driver.GradeContains() < 6)
                 {
                     Console.Write("For exit press \"q\". Give the driver a rating: ");
                     var inDrv = Console.ReadLine();
@@ -67,19 +67,21 @@ void Menu()
                 }
                 break;
             case "3":
-                if (driver.grades.Count == 0)
+                if (driver.GradeContains() == 0)
                 {
                     Console.WriteLine("No ratings to show");
                     Console.ReadKey();
                     Console.Clear();
                     break;
                 }
-                DriverFile.SaveToFile(driver.grades);
+                else
+                {
+                    driver.GetStatistics();
+                    PrintStatistics(driver);
+                }
+                //DriverFile.SaveToFile(driver.grades);
                 break;
             case "4":
-                driver.PrintStatistics();
-                break;
-            default:
                 Console.WriteLine("***  Are you sure want to close program y/n ? ***");
                 var confirmExit = Console.ReadLine();
                 Console.Clear();
@@ -88,6 +90,9 @@ void Menu()
                     Console.WriteLine("Thanks for using the program");
                     exitProgram = false;
                 }
+                break;
+            default:
+                Console.WriteLine("Thanks for using program");
                 break;
         }
     }
@@ -147,4 +152,20 @@ bool CheckStringIsEmpty(string msg, string value)
         return true;
     }
     return false;
+}
+void PrintStatistics(IDriver driver)
+{
+    var statistics = driver.GetStatistics();
+    if (statistics.Count == 0 || statistics.Count == null)
+    {
+        throw new Exception("Driver is not grade. Please grade Driver");
+    }
+    else
+    {
+        //var driverStats = GetStatistics();
+        Console.WriteLine("Your statistics is: ");
+        Console.WriteLine($"Min - {statistics.Min}");
+        Console.WriteLine($"Max - {statistics.Max}");
+        Console.WriteLine($"Avg - {statistics.Avg:N0}");
+    }
 }

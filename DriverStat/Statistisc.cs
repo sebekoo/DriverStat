@@ -22,7 +22,7 @@
             Min = int.MaxValue;
         }
 
-        public void AddGrade(int grade)
+        public void CalculateStatistics(int grade)
         {
             Count++;
             Sum += grade;
