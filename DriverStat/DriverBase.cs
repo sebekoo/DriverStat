@@ -6,11 +6,7 @@
 
         public abstract event GradeAddedDelegate GradeAdded;
 
-        public DriverBase()
-        {
-        }
-
-        protected DriverBase(string name, string surname, int idDriver)
+        public DriverBase(string name, string surname, int idDriver)
         {
             Name = name;
             Surname = surname;
@@ -21,7 +17,20 @@
         public string Surname { get; private set; }
         public int IdDriver { get; private set; }
 
-        public abstract void AddGrade(string grade);
+        //public abstract void AddGrade(string grade);
+
+        public void AddGrade(string grade)
+        {
+            if (int.TryParse(grade, out int result))
+            {
+                AddGrade(result);
+            }
+            else
+            {
+                Console.WriteLine("String is not int");
+            }
+        }
+
         public abstract void AddGrade(int grade);
         public abstract Statistics GetStatistics();
 

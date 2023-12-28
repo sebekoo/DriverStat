@@ -1,171 +1,235 @@
 ﻿using DriverStat;
+using System.Reflection;
 
-Menu();
+Title();
+MenuProgram();
 
-void Menu()
+void MenuProgram()
 {
-    DriverMemory driver = new();
+    Console.WriteLine();
+
+    Console.WriteLine("Enter driver details.");
+    string name = ReadName();
+    string surname = ReadSurname();
+    int idDriver = ReadIdDriver();
+    string fileName = name + "_" + surname + "_" + idDriver;
+    CheckFileExists(fileName);
+
+    IDriver driver = null;
+
     var exitProgram = true;
 
     while (exitProgram)
     {
-        var index = 1;
-        Console.WriteLine();
-        Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.\n");
-        Console.WriteLine("{0}. Create Driver", index++); //1
-        Console.WriteLine("{0}. Add grade", index++); //2
-        //Console.WriteLine("{0}. Save grade to file", index++);
-        Console.WriteLine("{0}. Show statistics", index++); //3
-        Console.WriteLine("{0}. Exit program", index++); //4
-
-        string optionMenu = Console.ReadLine();
-        Console.Clear();
+        PrintMenu();
+        var optionMenu = Console.ReadLine();
 
         switch (optionMenu)
         {
             case "1":
-                if (string.IsNullOrEmpty(driver.Name))
-                {
-                    driver = CreateDriver();
-                }
-                else
-                {
-                    Console.WriteLine("Do You want create new Driver ? y/n :");
-                    var yesNo = Console.ReadLine();
-
-                    if (yesNo.Equals("y"))
-                    {
-                        break;
-                    }
-                }
-                driver.PrintDriver();
+                driver = NewDriverInMemory(name, surname, idDriver);
+                GradeDriver(driver, fileName);
+                PrintStatistics(driver);
+                Pause();
                 break;
             case "2":
-                while (driver.GradeContains() < 6)
-                {
-                    Console.Write("For exit press \"q\". Give the driver a rating: ");
-                    var inDrv = Console.ReadLine();
-
-                    if (inDrv == "q" || inDrv == "Q")
-                    {
-                        break;
-                    }
-                    else if (inDrv == "")
-                    {
-                        Console.WriteLine("No rating provided");
-                        continue;
-                    }
-
-                    try
-                    {
-                        driver.AddGrade(inDrv);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Exception catched: {e.Message}");
-                    }
-                }
+                string path = Directory.GetCurrentDirectory();
+                ListFilesTXT(path);
                 break;
             case "3":
-                if (driver.GradeContains() == 0)
+                driver = NewDriverInFile(name, surname, idDriver);
+                if (driver != null)
                 {
-                    Console.WriteLine("No ratings to show");
-                    Console.ReadKey();
-                    Console.Clear();
-                    break;
-                }
-                else
-                {
-                    driver.GetStatistics();
+                    GradeDriver(driver, fileName);
                     PrintStatistics(driver);
+                    Pause();
                 }
-                //DriverFile.SaveToFile(driver.grades);
                 break;
             case "4":
+                PrintStatistics(driver!);
+                Pause();
+                break;
+            case "5":
+                Console.Clear();
+                Title();
+                MenuProgram();
+                break;
+            case "6":
                 Console.WriteLine("***  Are you sure want to close program y/n ? ***");
                 var confirmExit = Console.ReadLine();
                 Console.Clear();
-                if (confirmExit.Equals("y"))
+                if (confirmExit!.Equals("y"))
                 {
-                    Console.WriteLine("Thanks for using the program");
                     exitProgram = false;
                 }
                 break;
             default:
                 Console.WriteLine("Thanks for using program");
+                exitProgram = false;
                 break;
         }
     }
 }
 
-DriverMemory CreateDriver()
+string ReadName()
 {
-    Console.Clear();
-    Console.WriteLine("Enter driver details.");
     Console.Write("     name: ");
     var name = Console.ReadLine();
-    if (CheckStringIsEmpty("Driver Name", name))
+    while (name == null || name == "")
     {
-        return null;
+        Console.Write("     name: ");
+        name = Console.ReadLine();
     }
+    return name;
+}
+
+string ReadSurname()
+{
     Console.Write("  surname: ");
     var surname = Console.ReadLine();
-    if (CheckStringIsEmpty("Driver Surname", surname))
+    while (surname == null || surname == "")
     {
-        return null;
+        Console.Write("  surname: ");
+        surname = Console.ReadLine();
     }
+    return surname;
+}
 
-    Console.Write("ID driver: ");
-    var lenght = Console.ReadLine();
-    bool isNumber = int.TryParse(lenght, out var number);
-    bool isLongerThanOne = lenght.Length > 1;
-
-    if (!isNumber)
+int ReadIdDriver()
+{
+    Console.Write(" idDriver: ");
+    var idDriver = 0;
+    idDriver = int.Parse(Console.ReadLine()!);
+    while (idDriver == null)
     {
-        Console.WriteLine("ID driver must be number \n  Press any key to continue");
-        Console.ReadKey();
-        return null;
+        Console.Write(" idDriver: ");
+        idDriver = int.Parse(Console.ReadLine()!);
     }
-    else if (isLongerThanOne)
+    return idDriver;
+}
+
+DriverBase NewDriverInMemory(string name, string surname, int idDriver)
+{
+    return new DriverMemory(name, surname, idDriver);
+}
+
+DriverBase NewDriverInFile(string name, string surname, int idDriver)
+{
+    return new DriverFile(name, surname, idDriver);
+}
+
+static void ListFilesTXT(string path)
+{
+    try
     {
-        Console.WriteLine("ID driver is too long \n  Press any key to continue");
-        Console.ReadKey();
-        return null;
+        string[] files = Directory.GetFiles(path, "*.txt");
+        Console.WriteLine("Saved file names: ");
+        if (files != null && files.Length > 0)
+        {
+            foreach (string file in files)
+            {
+                Console.WriteLine(Path.GetFileName(file));
+            }
+        }
+        else
+        {
+            Console.WriteLine("No stored files.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+        throw;
+    }
+}
+
+void CheckFileExists(string fileName)
+{
+
+    if (File.Exists($"{fileName}.txt"))
+    {
+        Console.WriteLine($"File named '{fileName}.txt' already exists in the default folder.");
     }
     else
     {
-        CheckStringIsEmpty("ID driver ", name);
+        Console.WriteLine($"File named '{fileName}.txt' does not exist in the default folder.");
     }
-
-    var idDriver = int.Parse(lenght);
-    var driver = new DriverMemory(name, surname, idDriver);
-
-    return driver;
 }
 
-bool CheckStringIsEmpty(string msg, string value)
+void GradeDriver(IDriver driver, string fileName)
 {
-    if (string.IsNullOrEmpty(value))
+    Console.WriteLine("\nFor exit press \"q\"");
+
+    for (int i = 0; i < 7; i++) // Przy dodawaniu oceny do pliku (gdyż wpisy już istnieją) mogę dodać tylko jedna ocenę,
     {
-        Console.WriteLine("{0} cannot be empty or blank", msg);
-        Console.ReadKey();
-        return true;
+        Console.Write("Give the driver a rating: ");
+        var inDrv = Console.ReadLine();
+
+        if (inDrv == "q" || inDrv == "Q")
+        {
+            Console.WriteLine("Exit");
+        }
+        else if (inDrv == "")
+        {
+            Console.WriteLine("No rating provided");
+        }
+
+        try
+        {
+            driver.GradeAdded += DriverGradeAdded;
+            driver.AddGrade(inDrv!);
+            driver.GradeAdded -= DriverGradeAdded;
+            var count = driver.GetStatistics();
+            i = count.Count;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Exception catched: {e.Message}");
+            i--;
+        }
     }
-    return false;
 }
-void PrintStatistics(IDriver driver)
+
+void DriverGradeAdded(object sender, EventArgs args)
+{
+    Console.WriteLine("Added grade.");
+}
+
+void Pause()
+{
+    Console.WriteLine("Press any key");
+    Console.ReadKey();
+    Console.Clear();
+}
+
+void Title()
+{
+    Console.WriteLine("Hello driver! \nThe program will calculate your driving statistics.\n");
+}
+
+static void PrintMenu()
+{
+    Console.WriteLine("\n1. Create temprary grade and show statistics");
+    Console.WriteLine("2. Show saved files:");
+    Console.WriteLine("3. Create new file or update exist file");
+    Console.WriteLine("4. Show statistics");
+    Console.WriteLine("5. Create new Driver ");
+    Console.WriteLine("6. Exit program");
+}
+
+void PrintStatistics(IDriver driver) // Po uruchomieniu programu jeśli wybieram statystki pojawia się błąd
 {
     var statistics = driver.GetStatistics();
-    if (statistics.Count == 0 || statistics.Count == null)
+    if (statistics.Count == 0 || statistics == null)
     {
         throw new Exception("Driver is not grade. Please grade Driver");
     }
     else
     {
-        //var driverStats = GetStatistics();
-        Console.WriteLine("Your statistics is: ");
+        Console.WriteLine($"\nStatistics for {driver.Name} {driver.Surname} {driver.IdDriver} is: ");
         Console.WriteLine($"Min - {statistics.Min}");
         Console.WriteLine($"Max - {statistics.Max}");
-        Console.WriteLine($"Avg - {statistics.Avg:N0}");
+        Console.WriteLine($"Avg - {statistics.Avg:N0}\n");
     }
 }
+

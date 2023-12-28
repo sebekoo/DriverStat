@@ -2,15 +2,13 @@
 {
     public class DriverMemory : DriverBase
     {
+        public new delegate void GradeAddedDelegate(object sender, EventArgs args);
+
+        public override event DriverBase.GradeAddedDelegate GradeAdded;
 
         private List<int> grades = new();
 
-        public override event GradeAddedDelegate GradeAdded;
 
-        public DriverMemory()
-            : base()
-        {
-        }
         public DriverMemory(string name, string surname, int idDriver)
             : base(name, surname, idDriver)
         {
@@ -31,27 +29,10 @@
                 return (int)grades.Average();
             }
         }
-
+              
         public int GradeContains()
         {
             return grades.Count;
-        }
-
-        public override void AddGrade(string grade)
-        {
-            if (int.TryParse(grade, out int result))
-            {
-                AddGrade(result);
-
-                if (GradeAdded != null)
-                {
-                    GradeAdded(this, new EventArgs());
-                }
-            }
-            else
-            {
-                throw new Exception("You must enter the rating in numerical form \n");
-            }
         }
 
         public override void AddGrade(int grade)
@@ -67,6 +48,11 @@
             else
             {
                 grades.Add(grade);
+                
+                if (GradeAdded != null)
+                {
+                    GradeAdded(this, new EventArgs());
+                }
             }
         }
 

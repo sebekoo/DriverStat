@@ -1,73 +1,77 @@
-﻿namespace DriverStat
+﻿using System.Xml.Linq;
+
+namespace DriverStat
 {
     public class DriverFile : DriverBase
     {
-        private const string fileName = "driver.txt";
+        private string fileName;
 
         public override event GradeAddedDelegate GradeAdded;
 
-        //public void SaveToFile(List<int> grade)
-        //{
-        //    using var writer = File.AppendText(fileName);
-        //    if (File.Exists(fileName))
-        //    {
-        //        for (int i = 0; i < grade.Count; i++)
-        //        {
-        //            writer.WriteLine(grade[i]);
-        //        }
-        //        Console.WriteLine("Grade saved");
-        //    }
-        //}
-
-        public override Statistics GetStatistics()
+        public DriverFile(string name, string surname, int idDriver)
+            : base(name, surname, idDriver)
         {
-            var statistics = new Statistics();
-            var grades = new List<int>();
-            if (File.Exists(fileName))
+            fileName = $"{name + "_" + surname + "_" + idDriver}.txt";
+
+            while (!File.Exists($"{fileName}"))
             {
-                using var reader = File.OpenText(fileName);
+                using var writer = new StreamWriter(fileName, true);
                 {
-                    var line = reader.ReadLine();
-                    while (line is not null)
+                    if (File.Exists($"{fileName}"))
                     {
-                        var number = -1;
-                        int.TryParse(line, out number);
-                        if (number > 0)
-                        {
-                            grades.Add(number);
-                        }
-                        line = reader.ReadLine();
+                        Console.WriteLine($"New file \"{fileName}\",  has been created");
+                    }
+                    else
+                    {
+                        throw new Exception("File has not been created because of unknown error. Try again");
                     }
                 }
-            }
-            return statistics;
-        }
-
-        public override void AddGrade(string grade)
-        {
-            if (int.TryParse(grade, out int result))
-            {
-                AddGrade(result);
-            }
-            else
-            {
-                Console.WriteLine("String is not int");
             }
         }
 
         public override void AddGrade(int grade)
         {
-            if (grade > 0)
+            if (grade < 0)
             {
-                using (var writer = File.AppendText(fileName))
-                {
-                    writer.WriteLine(grade);
-                }
+                throw new Exception("The rating can't be negative \n");
+            }
+            else if (grade > 99)
+            {
+                throw new Exception("Max rating is 99 \n");
             }
             else
             {
-                throw new Exception("Incorrect value");
+                using var writer = File.AppendText(fileName);
+                {
+                    writer.WriteLine(grade);
+                }
+                if (GradeAdded != null)
+                {
+                    GradeAdded(this, new EventArgs());
+                }
             }
+        }
+
+        public override Statistics GetStatistics()
+        {
+            var statistics = new Statistics();
+            if (File.Exists(fileName))
+            {
+                using var reader = File.OpenText(fileName);
+                {
+                    string line = reader.ReadLine()!;
+                    while (line is not null)
+                    {
+                        int.TryParse(line, out int number);
+                        if (number > 0)
+                        {
+                            statistics.CalculateStatistics(number);
+                        }
+                        line = reader.ReadLine()!;
+                    }
+                }
+            }
+            return statistics;
         }
     }
 }
