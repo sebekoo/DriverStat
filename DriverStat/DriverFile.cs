@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace DriverStat
+﻿namespace DriverStat
 {
     public class DriverFile : DriverBase
     {

@@ -1,5 +1,4 @@
 ﻿using DriverStat;
-using System.Reflection;
 
 Title();
 MenuProgram();
@@ -16,7 +15,7 @@ void MenuProgram()
     CheckFileExists(fileName);
 
     IDriver driver = null;
-
+    
     var exitProgram = true;
 
     while (exitProgram)
@@ -46,7 +45,21 @@ void MenuProgram()
                 }
                 break;
             case "4":
-                PrintStatistics(driver!);
+                driver = NewDriverInFile(name, surname, idDriver);
+                try
+                {
+                    PrintStatistics(driver!);
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                    if (driver != null)
+                    {
+                        GradeDriver(driver, fileName);
+                        PrintStatistics(driver);
+                    }
+                }
                 Pause();
                 break;
             case "5":
@@ -160,7 +173,7 @@ void GradeDriver(IDriver driver, string fileName)
 {
     Console.WriteLine("\nFor exit press \"q\"");
 
-    for (int i = 0; i < 7; i++) // Przy dodawaniu oceny do pliku (gdyż wpisy już istnieją) mogę dodać tylko jedna ocenę,
+    for (int i = 0; i < 7; i++)
     {
         Console.Write("Give the driver a rating: ");
         var inDrv = Console.ReadLine();
@@ -217,7 +230,7 @@ static void PrintMenu()
     Console.WriteLine("6. Exit program");
 }
 
-void PrintStatistics(IDriver driver) // Po uruchomieniu programu jeśli wybieram statystki pojawia się błąd
+void PrintStatistics(IDriver driver)
 {
     var statistics = driver.GetStatistics();
     if (statistics.Count == 0 || statistics == null)
@@ -226,10 +239,9 @@ void PrintStatistics(IDriver driver) // Po uruchomieniu programu jeśli wybieram
     }
     else
     {
-        Console.WriteLine($"\nStatistics for {driver.Name} {driver.Surname} {driver.IdDriver} is: ");
+        Console.WriteLine($"\nStatistics for driver: ({driver.Name} {driver.Surname} {driver.IdDriver}) is: ");
         Console.WriteLine($"Min - {statistics.Min}");
         Console.WriteLine($"Max - {statistics.Max}");
         Console.WriteLine($"Avg - {statistics.Avg:N0}\n");
     }
 }
-

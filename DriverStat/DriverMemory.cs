@@ -29,11 +29,6 @@
                 return (int)grades.Average();
             }
         }
-              
-        public int GradeContains()
-        {
-            return grades.Count;
-        }
 
         public override void AddGrade(int grade)
         {
