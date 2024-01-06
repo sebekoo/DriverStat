@@ -12,7 +12,7 @@ namespace Driver.Tests
 
             var result = driver.Result;
 
-            Assert.AreEqual(11, result);
+            Assert.That(result, Is.EqualTo(11));
         }
         [Test]
         public void Add_whenDriverCollcteStories_ShouldReturnAvg()
@@ -23,21 +23,26 @@ namespace Driver.Tests
 
             var result = driver.Avg;
 
-            Assert.AreEqual(7, result);
+            Assert.That(result, Is.EqualTo(7));
         }
         [Test]
         public void Creaded_WhenCreatedDriver_ShouldReturnDriverFile()
         {
             var driver = new DriverFile("Jan", "Nowak", 1);
 
+            var driverFileName = new DriverFile(driver.Name, driver.Surname, driver.IdDriver);
+            Assert.That(driverFileName.Name, Is.EqualTo(driver.Name));
+            Assert.That(driverFileName.Surname, Is.EqualTo(driver.Surname));
+            Assert.That(driverFileName.IdDriver, Is.EqualTo(driver.IdDriver));
+        }
+        [Test]
+        public void CheckingThatThereAreOnlyThreeProperties()
+        {
+            var driver = new DriverFile("Jan", "Nowak", 1);
+
             var driverType = driver.GetType();
             var driverProperties = driverType.GetProperties();
-            Assert.AreEqual(3, driverProperties.Length);
-
-            var driverFileName = new DriverFile(driver.Name, driver.Surname, driver.IdDriver);
-            Assert.AreEqual(driver.Name, driverFileName.Name);
-            Assert.AreEqual(driver.Surname, driverFileName.Surname);
-            Assert.AreEqual(driver.IdDriver, driverFileName.IdDriver);
+            Assert.That(driverProperties.Length, Is.EqualTo(3));
         }
     }
 }
