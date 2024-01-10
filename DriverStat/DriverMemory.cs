@@ -8,7 +8,6 @@
 
         private List<int> grades = new();
 
-
         public DriverMemory(string name, string surname, int idDriver)
             : base(name, surname, idDriver)
         {
@@ -43,7 +42,7 @@
             else
             {
                 grades.Add(grade);
-                
+
                 if (GradeAdded != null)
                 {
                     GradeAdded(this, new EventArgs());

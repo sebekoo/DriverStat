@@ -15,7 +15,7 @@ void MenuProgram()
     CheckFileExists(fileName);
 
     IDriver driver = null;
-    
+
     var exitProgram = true;
 
     while (exitProgram)
@@ -31,10 +31,12 @@ void MenuProgram()
                 PrintStatistics(driver);
                 Pause();
                 break;
+
             case "2":
                 string path = Directory.GetCurrentDirectory();
                 ListFilesTXT(path);
                 break;
+
             case "3":
                 driver = NewDriverInFile(name, surname, idDriver);
                 if (driver != null)
@@ -44,12 +46,12 @@ void MenuProgram()
                     Pause();
                 }
                 break;
+
             case "4":
                 driver = NewDriverInFile(name, surname, idDriver);
                 try
                 {
                     PrintStatistics(driver!);
-
                 }
                 catch (Exception ex)
                 {
@@ -62,11 +64,13 @@ void MenuProgram()
                 }
                 Pause();
                 break;
+
             case "5":
                 Console.Clear();
                 Title();
                 MenuProgram();
                 break;
+
             case "6":
                 Console.WriteLine("***  Are you sure want to close program y/n ? ***");
                 var confirmExit = Console.ReadLine();
@@ -76,6 +80,7 @@ void MenuProgram()
                     exitProgram = false;
                 }
                 break;
+
             default:
                 Console.WriteLine("Thanks for using program");
                 exitProgram = false;
@@ -158,7 +163,6 @@ static void ListFilesTXT(string path)
 
 void CheckFileExists(string fileName)
 {
-
     if (File.Exists($"{fileName}.txt"))
     {
         Console.WriteLine($"File named '{fileName}.txt' already exists in the default folder.");
@@ -181,24 +185,27 @@ void GradeDriver(IDriver driver, string fileName)
         if (inDrv == "q" || inDrv == "Q")
         {
             Console.WriteLine("Exit");
+            break;
         }
         else if (inDrv == "")
         {
             Console.WriteLine("No rating provided");
         }
-
-        try
+        else
         {
-            driver.GradeAdded += DriverGradeAdded;
-            driver.AddGrade(inDrv!);
-            driver.GradeAdded -= DriverGradeAdded;
-            var count = driver.GetStatistics();
-            i = count.Count;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Exception catched: {e.Message}");
-            i--;
+            try
+            {
+                driver.GradeAdded += DriverGradeAdded;
+                driver.AddGrade(inDrv!);
+                driver.GradeAdded -= DriverGradeAdded;
+                var count = driver.GetStatistics();
+                i = count.Count;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception catched: {e.Message}");
+                i--;
+            }
         }
     }
 }

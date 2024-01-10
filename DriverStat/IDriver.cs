@@ -7,11 +7,13 @@ namespace DriverStat
         string Name { get; }
         string Surname { get; }
         int IdDriver { get; }
+
         void AddGrade(string grade);
+
         void AddGrade(int grade);
 
         event GradeAddedDelegate GradeAdded;
-        
+
         Statistics GetStatistics();
     }
 }

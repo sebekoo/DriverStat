@@ -16,7 +16,7 @@
             Surname = surname;
             IdDriver = idDriver;
         }
-        
+
         public void AddGrade(string grade)
         {
             if (int.TryParse(grade, out int result))
@@ -30,6 +30,7 @@
         }
 
         public abstract void AddGrade(int grade);
+
         public abstract Statistics GetStatistics();
     }
 }
